@@ -17,10 +17,10 @@ async function getAdminData() {
     complaints: all,
     stats: {
       total: all.length,
-      pending: all.filter(c => c.status === 'pending').length,
-      in_review: all.filter(c => c.status === 'in_review').length,
-      resolved: all.filter(c => c.status === 'resolved').length,
-      dismissed: all.filter(c => c.status === 'dismissed').length,
+     pending: all.filter((c: any) => c.status === 'pending').length,
+in_review: all.filter((c: any) => c.status === 'in_review').length,
+resolved: all.filter((c: any) => c.status === 'resolved').length,
+dismissed: all.filter((c: any) => c.status === 'dismissed').length,
     }
   }
 }
@@ -52,7 +52,7 @@ export default async function AdminPage() {
             { label: 'In Review', value: stats.in_review, color: 'bg-slate text-paper' },
             { label: 'Resolved', value: stats.resolved, color: 'bg-sage text-paper' },
             { label: 'Dismissed', value: stats.dismissed, color: 'bg-mist text-ink' },
-          ].map(s => (
+          ].map((s: any) => (
             <div key={s.label} className={`p-5 text-center ${s.color} border-2 border-ink/10`}>
               <div className="font-display text-4xl font-bold">{s.value}</div>
               <div className="font-mono text-xs uppercase tracking-widest opacity-70 mt-1">{s.label}</div>
@@ -71,7 +71,7 @@ export default async function AdminPage() {
             <div className="text-center py-20 text-ink/40 font-mono">No complaints yet</div>
           ) : (
             <div className="divide-y divide-ink/10">
-              {complaints.map(complaint => (
+              {complaints.map((complaint: any) => (
                 <AdminComplaintCard key={complaint.id} complaint={complaint} />
               ))}
             </div>
