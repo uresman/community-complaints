@@ -23,7 +23,7 @@ const jetbrains = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'CivicVoice — Community Complaint System',
+  title: 'Balite — Community Complaint System',
   description: 'Submit and track community complaints. Your voice matters.',
   keywords: ['community', 'complaints', 'civic', 'local government', 'feedback'],
 }
