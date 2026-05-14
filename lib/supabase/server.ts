@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { Database } from '@/types'
 
@@ -13,6 +14,7 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll()
         },
+
         setAll(cookiesToSet: any[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
@@ -26,16 +28,8 @@ export async function createClient() {
 }
 
 export function createAdminClient() {
-  const supabase = require('@supabase/supabase-js')
-
-  return supabase.createClient(
+  return createSupabaseClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    }
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 }
