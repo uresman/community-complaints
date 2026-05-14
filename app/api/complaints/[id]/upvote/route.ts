@@ -10,9 +10,18 @@ export async function POST(
   const headersList = await headers()
 
   // Create a fingerprint from IP + user agent
-  const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown'
+  const ip =
+    headersList.get('x-forwarded-for') ||
+    headersList.get('x-real-ip') ||
+    'unknown'
+
   const ua = headersList.get('user-agent') || 'unknown'
-  const fingerprint = Buffer.from(`${ip}-${ua}-${id}`).toString('base64').slice(0, 64)
+
+  const fingerprint = Buffer.from(
+    `${ip}-${ua}-${id}`
+  )
+    .toString('base64')
+    .slice(0, 64)
 
   const supabase = createAdminClient()
 
@@ -25,22 +34,40 @@ export async function POST(
     .single()
 
   if (existing) {
-    return NextResponse.json({ error: 'Already voted' }, { status: 409 })
+    return NextResponse.json(
+      { error: 'Already voted' },
+      { status: 409 }
+    )
   }
 
   // Record vote
   const { error: voteError } = await supabase
     .from('complaint_upvotes')
-    .insert({ complaint_id: id, voter_fingerprint: fingerprint })
+    .insert(
+      [
+        {
+          complaint_id: id,
+          voter_fingerprint: fingerprint,
+        },
+      ] as never
+    )
 
   if (voteError) {
-    return NextResponse.json({ error: 'Failed to record vote' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Failed to record vote' },
+      { status: 500 }
+    )
   }
 
   // Increment upvote count
-  const { data, error } = await supabase.rpc('increment_upvotes', { complaint_id: id })
+ const { error } = await (supabase.rpc as any)(
+  'increment_upvotes',
+  {
+    complaint_id: id,
+  }
+)
 
-  // Fallback if RPC doesn't exist — do manual update
+  // Fallback if RPC doesn't exist
   if (error) {
     const { data: current } = await supabase
       .from('complaints')
@@ -49,9 +76,11 @@ export async function POST(
       .single()
 
     await supabase
-      .from('complaints')
-      .update({ upvotes: (current?.upvotes || 0) + 1 })
-      .eq('id', id)
+  .from('complaints')
+  .update({
+    upvotes: ((current as any)?.upvotes || 0) + 1,
+  } as never)
+  .eq('id', id)
   }
 
   return NextResponse.json({ success: true })
