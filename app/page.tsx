@@ -21,9 +21,9 @@ async function getStats() {
   if (!data) return { total: 0, pending: 0, in_review: 0, resolved: 0 }
   return {
     total: data.length,
-    pending: data.filter((d: any) => d.status === 'pending').length,
-    in_review: data.filter((d: any) => d.status === 'in_review').length,
-    resolved: data.filter((d: any)=> d.status === 'resolved').length,
+    pending: data.filter((d: Complaint) => d.status === 'pending').length,
+    in_review: data.filter((d: Complaint) => d.status === 'in_review').length,
+    resolved: data.filter((d: Complaint)=> d.status === 'resolved').length,
   }
 }
 

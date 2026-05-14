@@ -2,13 +2,16 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const loggedIn = request.cookies.get('admin-auth')
+  const isLoggedIn =
+    request.cookies.get('admin-auth')?.value === 'true'
 
-  if (
-    !loggedIn &&
+  const isAdminRoute =
     request.nextUrl.pathname.startsWith('/admin')
-  ) {
-    return NextResponse.redirect(new URL('/login', request.url))
+
+  if (isAdminRoute && !isLoggedIn) {
+    return NextResponse.redirect(
+      new URL('/login', request.url)
+    )
   }
 
   return NextResponse.next()
