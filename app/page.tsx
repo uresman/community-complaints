@@ -161,7 +161,7 @@ export default async function HomePage() {
       {/* Footer */}
       <footer className="border-t border-ink/10 px-6 py-8 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-ink/40 text-sm font-mono">
-          <div>CivicVoice © {new Date().getFullYear()} — Community Complaint System</div>
+          <div>Balite © {new Date().getFullYear()} — Community Complaint System</div>
           <div className="flex gap-6">
             <Link href="/track" className="hover:text-ink transition-colors">Track Complaint</Link>
             <Link href="/admin" className="hover:text-ink transition-colors">Admin</Link>
